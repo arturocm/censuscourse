@@ -1,0 +1,17 @@
+{
+    "contents" : "require(choroplethr)\nrequire(shiny)\nrequire(dplyr)\nrequire(choroplethrMaps)\n\n#load required data in State + Value format\ndata(df_pop_state)\ndata(df_state_demographics)\n\n#fuction to format column names text\ncapwords <- function(s, strict = FALSE) {\n  cap <- function(s) paste(toupper(substring(s, 1, 1)),\n                           {s <- substring(s, 2); if(strict) tolower(s) else s},\n                           sep = \"\", collapse = \" \" )\n  sapply(strsplit(s, split = \" \"), cap, USE.NAMES = !is.null(names(s)))\n}\n\n#obtain variable names for the dropdown menu and the plotting function\ncol.names <- colnames(df_state_demographics[, -1])\ndemographics.names <- gsub(\"_\", \" \",col.names) %>% capwords()\nselection <- as.data.frame(cbind(demographics.names, col.names))\n\nui <- fluidPage(\n  titlePanel(\"Mapping Census Data in R: States\"),\n  fluidRow(\n    column(12,\n           h4(\"Homework 1 from \", \n              a(\"@AriLamstein\", href=\"https://twitter.com/AriLamstein\", target=\"_blank\"),\n              \" email course Mapping Census Data in R\", \n              a(\"#censuscourse\", href=\"https://twitter.com/hashtag/censuscourse\", target=\"_blank\")),\n          \n           p(\"This is a simple shiny app that lets you select between \n             different variables from the df_state_demographics data frame\"),\n           p(\"In addition you can modify the argument num_colors from the \n             state_choropleth formula to see how it alterate the displayed colors\"),\n           h4(\n             \"Twitter:\", a(\"@arturocm\", href=\"https://twitter.com/arturocm\", target=\"_blank\")),\n           h4(\n             \"Github:\", a(\"@arturocm\", href=\"https://github.com/arturocm/censuscourse/blob/master/app.R\", \n                          target=\"_blank\"))\n    ),\n    column(2, wellPanel(\n      sliderInput(\"n\", \"Select number of colors you want to input into the state_choropleth formula \n                  (n=1 will use a continous scale):\", \n                  min = 1, max = 9, value = 1, step = 1),\n           hr(),\n           verbatimTextOutput('out5'),\n           selectInput('in5', 'Choose the demographic statistics you want to plot:', \n                       demographics.names, selectize=TRUE)\n    )),\n    column(10, plotOutput(\"plot1\", width = \"100%\", height = \"800px\", click = \"plot1_click\")\n    )\n    )\n  )\n\nserver <- function(input, output) {\n  output$plot1 <- renderPlot({\n    xref <- selection[selection[,1] %in% input$in5, 2]\n    df_state_demographics$value <- df_state_demographics[,as.character(xref)]\n    main <- paste0(\"2012 State Population Estimates: \", input$in5)\n    state_choropleth(df_state_demographics, title = main, legend = input$in5, num_colors = input$n)\n  })\n}\n\nshinyApp(ui = ui, server = server)",
+    "created" : 1435886442439.000,
+    "dirty" : false,
+    "encoding" : "UTF-8",
+    "folds" : "",
+    "hash" : "334155552",
+    "id" : "675B26EF",
+    "lastKnownWriteTime" : 1435888319,
+    "path" : "~/0 Coursera/CensusCourse/censuscourse/app.R",
+    "project_path" : "app.R",
+    "properties" : {
+    },
+    "relative_order" : 1,
+    "source_on_save" : false,
+    "type" : "r_source"
+}

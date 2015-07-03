@@ -7,7 +7,6 @@ require(choroplethrMaps)
 data(df_pop_state)
 data(df_state_demographics)
 
-
 #fuction to format column names text
 capwords <- function(s, strict = FALSE) {
   cap <- function(s) paste(toupper(substring(s, 1, 1)),
@@ -62,6 +61,5 @@ server <- function(input, output) {
     state_choropleth(df_state_demographics, title = main, legend = input$in5, num_colors = input$n)
   })
 }
-
 
 shinyApp(ui = ui, server = server)
