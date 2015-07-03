@@ -1,6 +1,7 @@
 require(choroplethr)
 require(shiny)
 require(dplyr)
+require(choroplethrMaps)
 
 #load required data in State + Value format
 data(df_pop_state)
@@ -31,7 +32,7 @@ ui <- fluidPage(
           
            p("This is a simple shiny app that lets you select between 
              different variables from the df_state_demographics data frame"),
-           p("In addition you can select the argument num_colors from the 
+           p("In addition you can modify the argument num_colors from the 
              state_choropleth formula to see how it alterate the displayed colors"),
            h4(
              "Twitter:", a("@arturocm", href="https://twitter.com/arturocm", target="_blank")),
@@ -39,11 +40,11 @@ ui <- fluidPage(
              "Github:", a("@arturocm", href="https://github.com/arturocm/censuscourse/blob/master/app.R", target="_blank"))
     ),
     column(2, wellPanel(
-      sliderInput("n", "Select number of colors:", 
+      sliderInput("n", "Select number of colors you want to input into the state_choropleth formula (n=1 will use a continous scale):", 
                   min = 1, max = 9, value = 1, step = 1),
            hr(),
            verbatimTextOutput('out5'),
-           selectInput('in5', 'Choose the demographic you want to plot:', demographics.names, selectize=TRUE)
+           selectInput('in5', 'Choose the demographic statistics you want to plot:', demographics.names, selectize=TRUE)
     )),
     column(10, plotOutput("plot1", width = "100%", height = "800px", click = "plot1_click")
     )
