@@ -1,6 +1,7 @@
 require(choroplethr)
 require(shiny)
 require(dplyr)
+require(choroplethrMaps)
 
 #load required data in State + Value format
 data(df_pop_state)
