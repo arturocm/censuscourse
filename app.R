@@ -37,14 +37,17 @@ ui <- fluidPage(
            h4(
              "Twitter:", a("@arturocm", href="https://twitter.com/arturocm", target="_blank")),
            h4(
-             "Github:", a("@arturocm", href="https://github.com/arturocm/censuscourse/blob/master/app.R", target="_blank"))
+             "Github:", a("@arturocm", href="https://github.com/arturocm/censuscourse/blob/master/app.R", 
+                          target="_blank"))
     ),
     column(2, wellPanel(
-      sliderInput("n", "Select number of colors you want to input into the state_choropleth formula (n=1 will use a continous scale):", 
+      sliderInput("n", "Select number of colors you want to input into the state_choropleth formula 
+                  (n=1 will use a continous scale):", 
                   min = 1, max = 9, value = 1, step = 1),
            hr(),
            verbatimTextOutput('out5'),
-           selectInput('in5', 'Choose the demographic statistics you want to plot:', demographics.names, selectize=TRUE)
+           selectInput('in5', 'Choose the demographic statistics you want to plot:', 
+                       demographics.names, selectize=TRUE)
     )),
     column(10, plotOutput("plot1", width = "100%", height = "800px", click = "plot1_click")
     )
@@ -59,5 +62,6 @@ server <- function(input, output) {
     state_choropleth(df_state_demographics, title = main, legend = input$in5, num_colors = input$n)
   })
 }
+
 
 shinyApp(ui = ui, server = server)

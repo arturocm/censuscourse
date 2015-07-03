@@ -1,8 +1,14 @@
 name: censuscourse
 account: arturocm
 server: shinyapps.io
+<<<<<<< HEAD
 bundleId: 214740
 url: https://arturocm.shinyapps.io/censuscourse
 when: 1435886976.80448
+=======
+bundleId: 214738
+url: https://arturocm.shinyapps.io/censuscourse
+when: 1435886782.06501
+>>>>>>> 6a3aa6ba19238354ff7595eea3329dbcd82c17af
 asMultiple: FALSE
 asStatic: FALSE
