@@ -15,7 +15,6 @@ capwords <- function(s, strict = FALSE) {
   sapply(strsplit(s, split = " "), cap, USE.NAMES = !is.null(names(s)))
 }
 
-
 #obtain variable names for the dropdown menu and the plotting function
 col.names <- colnames(df_state_demographics[, -1])
 demographics.names <- gsub("_", " ",col.names) %>% capwords()
@@ -35,7 +34,9 @@ ui <- fluidPage(
            p("In addition you can select the argument num_colors from the 
              state_choropleth formula to see how it alterate the displayed colors"),
            h4(
-             "Twitter:", a("@arturocm", href="https://twitter.com/arturocm", target="_blank"))
+             "Twitter:", a("@arturocm", href="https://twitter.com/arturocm", target="_blank")),
+           h4(
+             "Github:", a("@arturocm", href="https://github.com/arturocm/censuscourse/blob/master/app.R", target="_blank"))
     ),
     column(2, wellPanel(
       sliderInput("n", "Select number of colors:", 
