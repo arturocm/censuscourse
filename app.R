@@ -2,11 +2,14 @@ require(choroplethr)
 require(shiny)
 require(dplyr)
 require(choroplethrMaps)
+require(choroplethrZip)
+require(mapproj)
 
 #load required data in State + Value format
 data(df_pop_state)
 data(df_state_demographics)
 data(df_county_demographics)
+data(df_zip_demographics)
 
 #fuction to format column names text
 capwords <- function(s, strict = FALSE) {
@@ -25,6 +28,10 @@ selection <- as.data.frame(cbind(demographics.names, col.names))
 col.names2 <- colnames(df_county_demographics[, -1])
 demographics.names2 <- gsub("_", " ",col.names2) %>% capwords()
 selection2 <- as.data.frame(cbind(demographics.names2, col.names2))
+## Zip level
+col.names3 <- colnames(df_zip_demographics[, -1])
+demographics.names3 <- gsub("_", " ",col.names3) %>% capwords()
+selection3 <- as.data.frame(cbind(demographics.names3, col.names2))
 
 ui <- navbarPage("Mapping Census Data in R: States",
 tabPanel("Homework 1", fluidPage(fluidRow(
@@ -72,7 +79,31 @@ tabPanel("Homework 2", fluidPage(fluidRow(
                 demographics.names2, selectize=TRUE)
   )),
              column(10, plotOutput("plot2", width = "100%", height = "800px"))
+  ))),
+
+tabPanel("Homework 3", fluidPage(fluidRow(
+  column(12,
+         h4("Homework 3 from ", 
+            a("@AriLamstein", href="https://twitter.com/AriLamstein", target="_blank"),
+            " email course Mapping Census Data in R", 
+            a("#censuscourse", href="https://twitter.com/hashtag/censuscourse", target="_blank")),
+         p("In HW3 we go a detail level deeper and create a choropleth of some other demographic statistic in 
+           the data.frame df_zip_demographics. The advantage of using Shiny is that you can selection
+           among all the variables from the data frame and play with the num_colors to see how they interact"),
+         h5("Twitter:", a("@arturocm", href="https://twitter.com/arturocm", target="_blank")),
+         h5("Github:", a("@arturocm", href="https://github.com/arturocm/censuscourse/blob/master/app.R", 
+                         target="_blank"))),
+  column(2, wellPanel(
+    sliderInput("n3", "num_color value to use in zip_choropleth
+                (n=1 will use a continous scale):", min = 1, max = 9, value = 1, step = 1),
+    hr(),
+    verbatimTextOutput('out3'),
+    selectInput('hw3', 'Choose the demographic statistics you want to plot:', 
+                demographics.names3, selectize=TRUE)
+    )),
+  column(10, plotOutput("plot3", width = "100%", height = "800px"))
   )))
+
 )
 
 server <- function(input, output) {
@@ -89,6 +120,14 @@ server <- function(input, output) {
     df_county_demographics$value <- df_county_demographics[,as.character(xref2)]
     main2 <- paste0("2012 County Population Estimates: ", input$hw2)
     county_choropleth(df_county_demographics, title = main2, legend = input$hw2, num_colors = input$n2)
+  })
+  
+  output$plot3 <- renderPlot({
+    xref3 <- selection3[selection3[,1] %in% input$hw3, 2]
+    df_zip_demographics$value <- df_zip_demographics[,as.character(xref3)]
+    main3 <- paste0("2012 County Population Estimates: ", input$hw3)
+    zip_choropleth(df_zip_demographics, title = main3, legend = input$hw3, num_colors = input$n3) + 
+      coord_map()
   })
   
 }
