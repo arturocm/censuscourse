@@ -33,7 +33,7 @@ selection2 <- as.data.frame(cbind(demographics.names2, col.names2))
 col.names3 <- colnames(df_zip_demographics[, -1])
 demographics.names3 <- gsub("_", " ",col.names3) %>% capwords()
 selection3 <- as.data.frame(cbind(demographics.names3, col.names2))
-url <- "https://raw.githubusercontent.com/arturocm/censuscourse/master/national_county.txt"
+url <- "national_county.txt"
 zip.code <- read.csv(url, header = FALSE, colClasses = "character", 
                 col.names = c("state","zip1","zip2","county","v5")) %>% 
   mutate(zip = paste(zip1,zip2,sep=""), state.county = paste(state, county, sep = "-")) %>%
